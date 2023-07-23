@@ -1,4 +1,4 @@
-// File: /Users/ephraimkgwele/Documents/projects/nfl/nfl-teams-nextjs/src/app/layout.tsx
+// File: /Applications/XAMPP/xamppfiles/htdocs/nfl-teams/src/app/layout.tsx
 import * as entry from '../../../src/app/layout.js'
 import type { ResolvingMetadata } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
