@@ -19,6 +19,26 @@ export default async function Home() {
       
       <Navbar/>
 
+      <div className="mb-15 grid w-full px-10 text-center lg:grid-cols-3 gap-5 lg:text-left relative z-[1]">
+
+        <form className='w-50 mb-10 block' action="">
+          
+          <label className='mb-2 block' htmlFor="">Filter By</label>
+          <div className='grid w-full lg:grid-cols-2 gap-5 '>
+            <select name="" id="" className='bg-transparent border border-neutral-700 rounded-lg p-2 outline-0'>
+              <option value="">All</option>
+              <option value="">Conference</option>
+              <option value="">Division</option>
+            </select>
+            {/* <select name="" id="" className='bg-transparent border border-neutral-700 rounded-lg p-2 outline-0'>
+              <option value="">Testing</option>
+            </select> */}
+          </div>
+          
+        </form>
+
+      </div>
+
       <div className="mb-32 grid w-full px-10 text-center lg:mb-0 lg:grid-cols-3 gap-5 lg:text-left relative z-[1]">
       
         {teamsData && teamsData?.data?.team?.map((team: any, index: any) => (
