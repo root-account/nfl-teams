@@ -1,3 +1,4 @@
+import { ReduxProvider } from '@/redux/provider'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
   description: 'Some information about your favourite NFL teams.',
 }
 
-export default function RootLayout({
+function RootLayout({
   children,
 }: {
   children: React.ReactNode
@@ -16,8 +17,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <ReduxProvider>{children}</ReduxProvider> 
+        {/* <div>{children}</div>  */}
       </body>
     </html>
   )
 }
+
+export default RootLayout
+

@@ -1,47 +1,116 @@
-import Image from 'next/image'
+// 'use client';
+// import { useEffect, useState } from 'react';
+
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
+import FilterInputs from '@/components/FilterInputs'
+import axios from 'axios';
 
-export const getTeamsData = async () => {
-  const apiRes = await fetch('https://delivery.chalk247.com/team_list/NFL.JSON?api_key=74db8efa2a6db279393b433d97c2bc843f8e32b0', {cache:"no-store"});
-  const data = await apiRes.json();
-  const teamsData = await data.results
-  
-  return teamsData;
-}
+import { useAppDispatch, useAppSelector } from "@/redux/Hooks";
+import {setTeams, filteredTeams, setFilterItems} from "@/redux/teams-slice";
+
+
+
+const getTeamsData  = axios.get('https://delivery.chalk247.com/team_list/NFL.JSON?api_key=74db8efa2a6db279393b433d97c2bc843f8e32b0').then(function(response) {
+    const data = response.data?.results?.data?.team
+
+    return data;
+}).catch(function(error) {
+    console.log(error);
+});
+
 
 export default async function Home() {
 
-  const teamsData = await getTeamsData();
+  /* 
+    - The client type code is commented out becuase the API needs the request coming
+    - from a server otherwise it throws CORS error
+  */
+  // const [teamsData, setTeamsData] = useState([]);
+  // const getTeamsData = () => {
+
+  //   const data = axios.get('https://delivery.chalk247.com/team_list/NFL.JSON?api_key=74db8efa2a6db279393b433d97c2bc843f8e32b0').then(function(response) {
+  //       setTeamsData(response.data);
+  //       console.log(response.data);
+        
+  //       console.log(teamsData)
+  //   }).catch(function(error) {
+  //       console.log(error);
+  //   });
+
+  // }
+  // useEffect(() => {
+  //   getTeamsData();
+  // },[]);
+
+  
+
+  let teamsData = await getTeamsData;
+
+  // const count = useAppSelector((state) => state.teamsReducer.teams);
+  // const dispatch = useAppDispatch();
+
+  // const { isLoading, isFetching, data, error } = useGetTeamsQuery(null);
+
+  // console.log("DATTTTTAAAA");
+  // console.log(data);
+  
+  
+  function getUniqueDataSet(type:string,data:any) {
+
+    const dataSet = new Set();
+    data.forEach((item:any) => {
+      if (type == "conference") {
+        dataSet.add(item?.conference);
+      }
+      if (type == "division") {
+        dataSet.add(item?.division);
+      }
+    });
+  
+    return Array.from(dataSet);
+
+  }
+
+  const uniqueConferences = getUniqueDataSet('conference', teamsData);
+  const uniqueDivisions = getUniqueDataSet('division', teamsData);
+
+  // console.log("Conference set");
+  // console.log(uniqueConferences);
+
+  // console.log("Division set");
+  // console.log(uniqueDivisions);
+
+
+  function filterDataByConferenceOrDivision(data:any, filterValue:string) {
+    return data.filter((item:any) => {
+      return item.conference === filterValue || item.division === filterValue;
+    });
+  }
+  
+  // Example usage:
+  const conferenceFilterValue = 'National Football Conference';
+  const divisionFilterValue = 'North';
+  
+  const filteredByConference = filterDataByConferenceOrDivision(teamsData, conferenceFilterValue);
+  console.log(filteredByConference);
+  
+  const filteredByDivision = filterDataByConferenceOrDivision(teamsData, divisionFilterValue);
+  console.log(filteredByDivision);
+
+  // teamsData = filteredByDivision;
+
 
   return (
     <main className="flex min-h-screen flex-col items-center p-24 before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
       
       <Navbar/>
 
-      <div className="mb-15 grid w-full px-10 text-center lg:grid-cols-3 gap-5 lg:text-left relative z-[1]">
-
-        <form className='w-50 mb-10 block' action="">
-          
-          <label className='mb-2 block' htmlFor="">Filter By</label>
-          <div className='grid w-full lg:grid-cols-2 gap-5 '>
-            <select name="" id="" className='bg-transparent border border-neutral-700 rounded-lg p-2 outline-0'>
-              <option value="">All</option>
-              <option value="">Conference</option>
-              <option value="">Division</option>
-            </select>
-            {/* <select name="" id="" className='bg-transparent border border-neutral-700 rounded-lg p-2 outline-0'>
-              <option value="">Testing</option>
-            </select> */}
-          </div>
-          
-        </form>
-
-      </div>
+      <FilterInputs/>
 
       <div className="mb-32 grid w-full px-10 text-center lg:mb-0 lg:grid-cols-3 gap-5 lg:text-left relative z-[1]">
       
-        {teamsData && teamsData?.data?.team?.map((team: any, index: any) => (
+        {teamsData && teamsData?.map((team: any, index: any) => (
             <Link
               key={index}
               href={`/team/${team?.id}`}
