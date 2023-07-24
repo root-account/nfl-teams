@@ -3,22 +3,21 @@ import { useEffect, useState } from 'react';
 
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
-import FilterInputs from '@/components/FilterInputs'
-import axios from 'axios';
 
 import { useAppDispatch, useAppSelector } from "@/redux/Hooks";
-import {seachTestData, getTestData, getTeams} from "@/redux/teams-slice";
+import {seachTestData, getTestData, getTeams, reset} from "@/redux/teams-slice";
+import { useRouter } from 'next/navigation';
 
 
 export default function Test() {
-
+  const router = useRouter();
   const [teamsData, setTeamsData] = useState([]);
 
   const [seachVal, setSeachVal] = useState("");
 
 
   const testData = useAppSelector((state) => state.teamsReducer.testData);
-  const filteredData = useAppSelector((state) => state.teamsReducer.filterItems);
+  const filteredData = useAppSelector((state) => state.teamsReducer.filteredData);
   const teams = useAppSelector((state) => state.teamsReducer.teams);
   const error = useAppSelector((state) => state.teamsReducer.error);
   
@@ -28,6 +27,11 @@ export default function Test() {
     dispatch(getTestData())
     dispatch(getTeams());
   },[]);
+
+  useEffect(() => {
+    dispatch(reset())
+    setTeamsData(testData);
+  }, [router]);
 
   useEffect(() => {
     // setTeamsData(teams);
@@ -77,7 +81,23 @@ export default function Test() {
       
       <Navbar/>
 
+      <div className='w-full px-10 mb-8'>
+        <ul>
+            <li className='my-2 text-sm opacity-70'>
+                This page was not part of the brief, I made the page to check if a different
+                API endpoint would be able to send request without CORS errors
+            </li>
+            <li className='my-2 text-sm opacity-70'>
+                The original API for NFL teams does not accept requests coming from a client, only the server.
+            </li>
+            <li className='my-2 text-sm opacity-70'>
+            On the <Link href={'/'} target='_blank'>root page </Link>  the application is able to fetch the data becuase the page is server rendered instead of client rendered like this one 
+            </li>
+        </ul>
+      </div>
+
       <div className="mb-15 grid w-full px-10 text-center lg:grid-cols-3 gap-5 lg:text-left relative z-[1]">
+        
 
         <form className='w-50 mb-10 block' action="">
           

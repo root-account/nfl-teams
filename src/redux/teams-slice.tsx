@@ -1,23 +1,29 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 
+// Declare types
 type initialState = {
     loading:boolean,
     teams:any;
     testData:any;
-    filterItems:any,
+    filteredData:any,
+    filterInputs:any,
     error:string,
 }
 
+// Initial state values
 const initialState = {
     loading: false,
     teams:[],
     testData:[],
-    filterItems:[],
+    filteredData:[],
+    filterInputs:[],
     error: "",
 } as initialState;
 
 
+
+// Fetch data from the Test API
 export const getTestData = createAsyncThunk('teams/getTestData',
     async () => {
       return fetchTestData;
@@ -30,6 +36,7 @@ const fetchTestData = axios.get('https://jsonplaceholder.typicode.com/users').th
 });
 
 
+// Fetch data from the NFL API
 export const getTeams = createAsyncThunk('teams/getTeams',
     async () => {
       const response = await fetch('https://delivery.chalk247.com/team_list/NFL.JSON?api_key=74db8efa2a6db279393b433d97c2bc843f8e32b0');
@@ -42,45 +49,40 @@ export const getTeams = createAsyncThunk('teams/getTeams',
     }
 )
 
-
+// Create a slice for the functions and reducers
 export const teams = createSlice({
     name:"teams",
     initialState,
     reducers:{
         reset: () => initialState,
-        setTeams: (state, action:PayloadAction<any>) => {            
+        setTeams: (state, action:PayloadAction<any>) => {   
+            /* Todo
+                - This should run the fetch data function and set the data when called
+            */   
             return{
                 loading: false,
                 teams:action.payload,
                 testData:[],
-                filterItems:state.filterItems,
+                filteredData:[],
+                filterInputs:state.filterInputs,
                 error: "",
             }
         },
-        filteredTeams: (state) => {
-            // Filter function here
-            let filteredData: [] = [];
-
-            return{
-                loading: false,
-                teams:filteredData,
-                testData:[],
-                filterItems:state.filterItems,
-                error: "",
-            }
-        },
-        setFilterItems: (state, action:PayloadAction<any>) => {
+        setFilterInputs: (state, action:PayloadAction<any>) => {
+            /* Todo
+                - This should update the state of inputs to filter by
+            */  
             return{
                 loading: false,
                 teams:state.teams,
                 testData:[],
-                filterItems:action.payload,
+                filteredData:[],
+                filterInputs:action.payload,
                 error: "",
             }
         },
         seachTestData: (state, action:PayloadAction<string>) => {
-            // Filter function here
-            
+            // Seach test data by keyword
             let filteredData = [];
             let seachVal = action.payload;
             let error = "";
@@ -89,58 +91,48 @@ export const teams = createSlice({
             filteredData = state.testData.filter((item:any) => {
                 const { name, email } = item;
                 const lowerCaseSearchVal = seachVal.toLowerCase();
-
-                // let result = name.toLowerCase().includes(lowerCaseSearchVal) || email.toLowerCase().includes(lowerCaseSearchVal)
-
-                // if (name.toLowerCase().includes(lowerCaseSearchVal) || email.toLowerCase().includes(lowerCaseSearchVal)) {
-                //     error = "";
-                //     return name.toLowerCase().includes(lowerCaseSearchVal) || email.toLowerCase().includes(lowerCaseSearchVal);
-                // }else{
-                //     error = "No results found";
-                //     filteredData = [];
-                //     return "";
-                // }
-
                 return name.toLowerCase().includes(lowerCaseSearchVal) || email.toLowerCase().includes(lowerCaseSearchVal);
             });
            }else{
                 filteredData = state.testData;
            }
-        
             return{
                 loading: false,
                 teams:state.teams,
                 testData:state.testData,
-                filterItems:filteredData,
+                filteredData:filteredData,
+                filterInputs:[],
                 error: error,
             }
         },
     },
     extraReducers: (builder) => {
+        // Bulder to fetch test data on load
         builder.addCase(getTestData.fulfilled, (state, action) => {
-
-            console.log("Test");
-            
             return{
                 loading: false,
                 teams:[],
                 testData:action.payload,
-                filterItems:state.filterItems,
+                filteredData:[],
+                filterInputs:state.filterInputs,
                 error: "",
             }
         }),
+        /*  Bulder to fetch NFL TEAMS data on load
+            -  Does not work for client because the API only accepts requests from server
+        */
         builder.addCase(getTeams.fulfilled, (state, action) => {
-            console.log("Test get teams");
             return{
                 loading: false,
                 teams:action.payload,
                 testData:[],
-                filterItems:state.filterItems,
+                filteredData:[],
+                filterInputs:state.filterInputs,
                 error: "",
             }
         })
     },
 });
 
-export const {setTeams, filteredTeams, setFilterItems, seachTestData} = teams.actions;
+export const {reset, setTeams, setFilterInputs, seachTestData} = teams.actions;
 export default teams.reducer;

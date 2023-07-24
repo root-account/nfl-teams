@@ -1,13 +1,11 @@
-// 'use client';
-// import { useEffect, useState } from 'react';
-
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
 import FilterInputs from '@/components/FilterInputs'
 import axios from 'axios';
 
 import { useAppDispatch, useAppSelector } from "@/redux/Hooks";
-import {setTeams, filteredTeams, setFilterItems} from "@/redux/teams-slice";
+import {setTeams, setFilterInputs} from "@/redux/teams-slice";
+import { revalidatePath } from 'next/cache';
 
 
 
@@ -22,83 +20,7 @@ const getTeamsData  = axios.get('https://delivery.chalk247.com/team_list/NFL.JSO
 
 export default async function Home() {
 
-  /* 
-    - The client type code is commented out becuase the API needs the request coming
-    - from a server otherwise it throws CORS error
-  */
-  // const [teamsData, setTeamsData] = useState([]);
-  // const getTeamsData = () => {
-
-  //   const data = axios.get('https://delivery.chalk247.com/team_list/NFL.JSON?api_key=74db8efa2a6db279393b433d97c2bc843f8e32b0').then(function(response) {
-  //       setTeamsData(response.data);
-  //       console.log(response.data);
-        
-  //       console.log(teamsData)
-  //   }).catch(function(error) {
-  //       console.log(error);
-  //   });
-
-  // }
-  // useEffect(() => {
-  //   getTeamsData();
-  // },[]);
-
-  
-
   let teamsData = await getTeamsData;
-
-  // const count = useAppSelector((state) => state.teamsReducer.teams);
-  // const dispatch = useAppDispatch();
-
-  // const { isLoading, isFetching, data, error } = useGetTeamsQuery(null);
-
-  // console.log("DATTTTTAAAA");
-  // console.log(data);
-  
-  
-  function getUniqueDataSet(type:string,data:any) {
-
-    const dataSet = new Set();
-    data.forEach((item:any) => {
-      if (type == "conference") {
-        dataSet.add(item?.conference);
-      }
-      if (type == "division") {
-        dataSet.add(item?.division);
-      }
-    });
-  
-    return Array.from(dataSet);
-
-  }
-
-  const uniqueConferences = getUniqueDataSet('conference', teamsData);
-  const uniqueDivisions = getUniqueDataSet('division', teamsData);
-
-  // console.log("Conference set");
-  // console.log(uniqueConferences);
-
-  // console.log("Division set");
-  // console.log(uniqueDivisions);
-
-
-  function filterDataByConferenceOrDivision(data:any, filterValue:string) {
-    return data.filter((item:any) => {
-      return item.conference === filterValue || item.division === filterValue;
-    });
-  }
-  
-  // Example usage:
-  const conferenceFilterValue = 'National Football Conference';
-  const divisionFilterValue = 'North';
-  
-  const filteredByConference = filterDataByConferenceOrDivision(teamsData, conferenceFilterValue);
-  console.log(filteredByConference);
-  
-  const filteredByDivision = filterDataByConferenceOrDivision(teamsData, divisionFilterValue);
-  console.log(filteredByDivision);
-
-  // teamsData = filteredByDivision;
 
 
   return (
