@@ -2,17 +2,17 @@ import Image from 'next/image'
 import Navbar from '@/components/Navbar'
 import { useParams } from 'next/navigation';
 
+import axios from 'axios';
 
-export const getUserData = async (userId:number) => {
-  
-  const apiRes = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`, {cache:"no-store"});
-  const data = await apiRes.json();
-  const userData = await data;
-  
-  console.log(data);
-  
-  return userData;
-}
+
+const getUserData = (userId:number) => axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`).then(function(response) {
+    const data = response.data    
+    return data;
+}).catch(function(error) {
+  console.log(error.response.data.result);
+  return error.response.data.result;
+});
+
 
 export default async function User({params}:any) {
 

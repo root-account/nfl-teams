@@ -1,22 +1,32 @@
 import Image from 'next/image'
 import Navbar from '@/components/Navbar'
 import { useParams } from 'next/navigation';
+import axios from 'axios';
+
+// export const getTeamData = async (teamId:number) => {
+  
+//   const apiRes = await fetch(`https://delivery.chalk247.com/team_report/NFL/${teamId}?api_key=74db8efa2a6db279393b433d97c2bc843f8e32b0`, {cache:"no-store"});
+//   const data = await apiRes.json();
+//   const teamData = await data.results;
+  
+//   return teamData;
+// }
 
 
-export const getTeamData = async (teamId:number) => {
-  
-  const apiRes = await fetch(`https://delivery.chalk247.com/team_report/NFL/${teamId}?api_key=74db8efa2a6db279393b433d97c2bc843f8e32b0`, {cache:"no-store"});
-  const data = await apiRes.json();
-  const teamData = await data.results;
-  
-  return teamData;
-}
+const getTeamData = (teamId:number) => axios.get(`https://delivery.chalk247.com/team_report/NFL/${teamId}?api_key=74db8efa2a6db279393b433d97c2bc843f8e32b0`).then(function(response) {
+    const data = response.data    
+    return data;
+}).catch(function(error) {
+  console.log(error.response.data.result);
+  return error.response.data.result;
+});
+
 
 export default async function Team({params}:any) {
 
 
   const teamData = await getTeamData(params?.id);
-  console.log(teamData);
+
   
   return (
     <main className="flex min-h-screen flex-col items-center p-24 before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
