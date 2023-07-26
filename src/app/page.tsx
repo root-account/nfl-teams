@@ -135,7 +135,7 @@ export default async function Home() {
               <label className='block'>Divison</label>
               <select name="filterByDivision" className='w-full block bg-transparent border border-neutral-700 rounded-lg p-2 outline-0'>
                   <option value="">All</option>
-                  {divisionFilterOptions.map((option, index) => (
+                  {divisionFilterOptions.map((option:[], index:number) => (
                   <option key={index} value={option}>
                       {option}
                   </option>
@@ -147,7 +147,7 @@ export default async function Home() {
               <label className='block'>Conference</label>
               <select name="filterByConference" className='w-full block bg-transparent border border-neutral-700 rounded-lg p-2 outline-0'>
                   <option value="">All</option>
-                  {conferenceFilterOptions?.map((option:any, index:number) => (
+                  {conferenceFilterOptions?.map((option:[], index:number) => (
                   <option key={index} value={option}>
                       {option}
                   </option>
