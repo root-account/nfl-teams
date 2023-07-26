@@ -1,10 +1,6 @@
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
-import FilterInputs from '@/components/FilterInputs'
 import axios from 'axios';
-
-import { useAppDispatch, useAppSelector } from "@/redux/Hooks";
-import {setTeams, setFilterInputs} from "@/redux/teams-slice";
 import { revalidatePath } from 'next/cache';
 
 
