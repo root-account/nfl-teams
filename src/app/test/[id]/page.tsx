@@ -1,9 +1,6 @@
 import Image from 'next/image'
 import Navbar from '@/components/Navbar'
 import axios from 'axios';
-import { GetStaticPaths, GetStaticPathsResult } from 'next';
-import {ParsedUrlQuery} from 'querystring';
-
 
 const getUserData = (userId:number) => axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`).then(function(response) {
     const data = response.data    
@@ -99,21 +96,3 @@ export default async function User({params}:any) {
   )
 }
 
-// export const getStaticPaths:GetStaticPaths<ParsedUrlQuery> = async () => {
-//   const response = await axios.get('https://jsonplaceholder.typicode.com/users');
-//   const users = response.data;
-  
-//   const params = users?.map((user: any) => ({
-//     id: String(user?.id),
-//   }));
-
-//   const paths = params.map((param:string) => ({
-//     params: param,
-//   }));
-
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-
-// };

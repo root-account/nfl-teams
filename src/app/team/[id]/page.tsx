@@ -3,11 +3,6 @@ import Navbar from '@/components/Navbar'
 import { useParams } from 'next/navigation';
 import axios from 'axios';
 
-import { GetStaticProps, GetStaticPropsContext } from 'next';
-import { GetStaticPaths, GetStaticPathsResult } from 'next';
-import {ParsedUrlQuery} from 'querystring';
-
-
 
 const getTeamData = (teamId:number) => axios.get(`https://delivery.chalk247.com/team_report/NFL/${teamId}?api_key=74db8efa2a6db279393b433d97c2bc843f8e32b0`).then(function(response) {
     const data = response.data    
@@ -54,23 +49,3 @@ export default async function Team({ params }: { params: { id: number } }) {
   )
 }
 
-
-
-// export const getStaticPaths:GetStaticPaths<ParsedUrlQuery> = async () => {
-//   const response = await axios.get('https://delivery.chalk247.com/team_list/NFL.JSON?api_key=74db8efa2a6db279393b433d97c2bc843f8e32b0');
-//   const teams = response.data?.results?.data?.team;
-  
-//   const params = teams?.map((team: any) => ({
-//     id: team?.id,
-//   }));
-
-//   const paths = params.map((param:string) => ({
-//     params: param,
-//   }));
-
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-
-// };
