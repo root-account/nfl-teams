@@ -8,12 +8,10 @@ import {setTeams, setFilterInputs} from "@/redux/teams-slice";
 import { revalidatePath } from 'next/cache';
 
 
-let divisionFilterOptions = ['West', 'South', 'North', 'East'];
-
-let count = 0;
+let divisionFilterOptions:any = [];
 let filterByDivision = "";
 let filterByConference = "";
-let conferenceFilterOptions:any =['National Football Conference', 'American Football Conference' ];
+let conferenceFilterOptions:any =[];
 let teamsData:any = [];
 
 
@@ -28,10 +26,10 @@ const getTeamsData  = axios.get('https://delivery.chalk247.com/team_list/NFL.JSO
 
 const filterTeams =  async (division:string, conference:string) => {
 
-  console.log(division);
-  console.log(conference);
-
   teamsData = await getTeamsData;
+
+  divisionFilterOptions = createFilterOptions('division');
+  conferenceFilterOptions = createFilterOptions('conference');
 
   if (division !== '' && conference !== '') {
     // Filter by both Division and Conference only
@@ -57,11 +55,23 @@ const filterTeams =  async (division:string, conference:string) => {
   return teamsData;
 };
 
-export default async function Home() {
 
+export const createFilterOptions = (key:string) => {
+  const filterOptions = new Set();
+
+  teamsData.forEach((team:any) => {
+    filterOptions.add(team[key]);
+  });
+
+  return Array.from(filterOptions);
+};
+
+export default async function Home() {
  
   if (filterByDivision == '' && filterByConference == '') {
     teamsData = await getTeamsData;
+    divisionFilterOptions = createFilterOptions('division');
+    conferenceFilterOptions = createFilterOptions('conference');
   }
 
   async function handleFormChange(formData:FormData){
