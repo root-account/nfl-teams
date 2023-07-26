@@ -68,7 +68,7 @@ export default function Test() {
             setTeamsData(testData); 
         }
     }
-  },[filteredData]);
+  },[filteredData, seachVal]);
   
 
   const handleChange = (event:any) => {
