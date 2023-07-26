@@ -9,6 +9,32 @@ import { revalidatePath } from 'next/cache';
 
 
 
+let divisionFilterOptions = ['West', 'South', 'North', 'East'];
+
+let count = 0;
+let filterByDivision = "";
+let filterByConference = "";
+let conferenceFilterOptions:any =['National Football Conference', 'American Football Conference' ];
+let teamsData:any = [];
+
+interface Team {
+  name: string;
+  nickname: string;
+  display_name: string;
+  id: string;
+  conference: string;
+  division: string;
+}
+
+interface TeamData {
+  results: {
+    data: {
+      team: Team[];
+    };
+  };
+}
+
+
 const getTeamsData  = axios.get('https://delivery.chalk247.com/team_list/NFL.JSON?api_key=74db8efa2a6db279393b433d97c2bc843f8e32b0').then(function(response) {
     const data = response.data?.results?.data?.team
 
@@ -18,9 +44,57 @@ const getTeamsData  = axios.get('https://delivery.chalk247.com/team_list/NFL.JSO
 });
 
 
+const filterTeams =  async (division:string, conference:string) => {
+
+  console.log(division);
+  console.log(conference);
+
+  teamsData = await getTeamsData;
+
+  if (division !== '' && conference !== '') {
+    // Filter by both Division and Conference only
+    const filteredTeams = teamsData.filter(
+      (team:any) => team.division == division && team.conference == conference
+    );
+    teamsData = filteredTeams;
+    
+  }else if (division !== '') {
+    // Filter by Division only
+    const filteredTeams = teamsData.filter(
+      (team:any) => team.division == division
+    );
+    teamsData = filteredTeams;
+  }else if (conference !== '') {
+    // Filter by Conference only
+    const filteredTeams = teamsData.filter(
+      (team:any) => team.conference == conference
+    );
+    teamsData = filteredTeams;
+  }
+
+  return teamsData;
+};
+
 export default async function Home() {
 
-  let teamsData = await getTeamsData;
+ 
+  if (filterByDivision == '' && filterByConference == '') {
+    teamsData = await getTeamsData;
+  }
+
+  async function handleFormChange(formData:FormData){
+    'use server'
+
+    filterByDivision = String(formData.get('filterByDivision'));
+    filterByConference = String(formData.get('filterByConference'))
+
+    filterTeams(filterByDivision, filterByConference);
+
+    console.log('NEW DATA');
+    console.log(teamsData);
+    
+    revalidatePath("/");
+  }
 
 
   return (
@@ -61,7 +135,66 @@ export default async function Home() {
       
       <Navbar/>
 
-      <FilterInputs/>
+      {/* <FilterInputs/> */}
+
+      <div className="mb-15 block w-full sm:mt-20">
+
+      <div className="mb-8 grid w-full px-10 text-center lg:grid-cols-3 gap-5 lg:text-left relative z-[1]">
+
+        <form className='w-50 mb- block' action={handleFormChange}>
+          <label className='mb-2 block' htmlFor="">Filter By</label>
+          <div className='grid w-full lg:grid-cols-2 gap-5 '>
+
+            <div className='w-full '>
+            <label className='block'>Divison</label>
+            <select name="filterByDivision" className='w-full block bg-transparent border border-neutral-700 rounded-lg p-2 outline-0'>
+                <option value="">All</option>
+                {divisionFilterOptions.map((option, index) => (
+                <option key={index} value={option}>
+                    {option}
+                </option>
+                ))}
+            </select>
+            </div>
+            
+            <div className='w-full '>
+            <label className='block'>Conference</label>
+            <select name="filterByConference" className='w-full block bg-transparent border border-neutral-700 rounded-lg p-2 outline-0'>
+                <option value="">All</option>
+                {conferenceFilterOptions?.map((option:any, index:number) => (
+                <option key={index} value={option}>
+                    {option}
+                </option>
+                ))}
+            </select>
+            </div>
+   
+            <div>
+              <button type='submit'>Filter</button>  
+            </div>
+          </div> 
+
+              
+        </form>
+    
+      </div>
+
+        {/* {error !== "" && (
+            <p className="mt-4 mb-8 text-rose-700 w-full px-10">
+                {error}
+            </p>
+        )} */}
+    </div>
+
+        
+      {/* <form action={handleFormChange}>
+        <select name="filterByDivision">
+          <option value="division">Division</option>
+          <option value="conference">Conference</option>
+        </select>
+        <button>Go get the data</button>
+      </form> */}
+
 
       <div className="mb-32 grid w-full px-10 text-left lg:mb-0 lg:grid-cols-3 gap-5 relative z-[1]">
       
