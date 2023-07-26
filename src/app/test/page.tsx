@@ -26,12 +26,12 @@ export default function Test() {
   useEffect(() => {
     dispatch(getTestData())
     dispatch(getTeams());
-  },[]);
+  },[dispatch]);
 
   useEffect(() => {
     dispatch(reset())
     setTeamsData(testData);
-  }, [router]);
+  }, [router, dispatch]);
 
   useEffect(() => {
     // setTeamsData(teams);
