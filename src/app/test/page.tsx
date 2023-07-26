@@ -77,11 +77,11 @@ export default function Test() {
   };
   
   return (
-    <main className="flex min-h-screen flex-col items-center p-24 before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
+    <main className="flex min-h-screen flex-col items-center md:p-24 before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
       
       <Navbar/>
 
-      <div className='w-full px-10 mb-8'>
+      <div className='w-full sm:mt-20 block px-10 mb-8'>
         <ul>
             <li className='my-2 text-sm opacity-70'>
                 This page was not part of the brief, I made the page to check if a different
@@ -96,7 +96,7 @@ export default function Test() {
         </ul>
       </div>
 
-      <div className="mb-15 grid w-full px-10 text-center lg:grid-cols-3 gap-5 lg:text-left relative z-[1]">
+      <div className="mb-15 grid w-full px-10 text-left lg:grid-cols-3 gap-5  relative z-[1]">
         
 
         <form className='w-50 mb-10 block' action="">
@@ -112,7 +112,7 @@ export default function Test() {
 
         
 
-      <div className="mb-32 grid w-full px-10 text-center lg:mb-0 lg:grid-cols-3 gap-5 lg:text-left relative z-[1]">
+      <div className="mb-32 grid w-full px-10 text-left lg:mb-0 lg:grid-cols-3 gap-5 relative z-[1]">
 
         {teamsData.length > 0 || filteredData.length > 0 ? teamsData?.map((team: any, index: any) => (
             <Link

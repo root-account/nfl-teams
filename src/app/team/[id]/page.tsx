@@ -3,14 +3,10 @@ import Navbar from '@/components/Navbar'
 import { useParams } from 'next/navigation';
 import axios from 'axios';
 
-// export const getTeamData = async (teamId:number) => {
-  
-//   const apiRes = await fetch(`https://delivery.chalk247.com/team_report/NFL/${teamId}?api_key=74db8efa2a6db279393b433d97c2bc843f8e32b0`, {cache:"no-store"});
-//   const data = await apiRes.json();
-//   const teamData = await data.results;
-  
-//   return teamData;
-// }
+import { GetStaticProps, GetStaticPropsContext } from 'next';
+import { GetStaticPaths, GetStaticPathsResult } from 'next';
+import {ParsedUrlQuery} from 'querystring';
+
 
 
 const getTeamData = (teamId:number) => axios.get(`https://delivery.chalk247.com/team_report/NFL/${teamId}?api_key=74db8efa2a6db279393b433d97c2bc843f8e32b0`).then(function(response) {
@@ -22,18 +18,18 @@ const getTeamData = (teamId:number) => axios.get(`https://delivery.chalk247.com/
 });
 
 
-export default async function Team({params}:any) {
+export default async function Team({ params }: { params: { id: number } }) {
 
 
   const teamData = await getTeamData(params?.id);
 
   
   return (
-    <main className="flex min-h-screen flex-col items-center p-24 before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
+    <main className="flex min-h-screen flex-col items-center md:p-24 before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
       
       <Navbar/>
 
-      <div className="mb-32 w-full px-10 grid text-center lg:mb-0 lg:grid-cols-1 lg:text-left relative z-[1]">
+      <div className="mb-32 w-full px-10 grid lg:mb-0 lg:grid-cols-1 text-left relative z-[1]">
         <div
           className="w-full group rounded-lg border border-transparent px-5 py-4 transition-colors border-gray-300 bg-gray-100 dark:border-neutral-700 dark:bg-neutral-800/30 border-neutral-700 hover:dark:bg-neutral-800/30"
         >
@@ -57,3 +53,24 @@ export default async function Team({params}:any) {
     </main>
   )
 }
+
+
+
+// export const getStaticPaths:GetStaticPaths<ParsedUrlQuery> = async () => {
+//   const response = await axios.get('https://delivery.chalk247.com/team_list/NFL.JSON?api_key=74db8efa2a6db279393b433d97c2bc843f8e32b0');
+//   const teams = response.data?.results?.data?.team;
+  
+//   const params = teams?.map((team: any) => ({
+//     id: team?.id,
+//   }));
+
+//   const paths = params.map((param:string) => ({
+//     params: param,
+//   }));
+
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+
+// };
