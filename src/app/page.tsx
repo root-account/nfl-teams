@@ -52,7 +52,7 @@ const filterTeams =  async (division:string, conference:string) => {
 };
 
 
-export const createFilterOptions = (key:string) => {
+const createFilterOptions = (key:string) => {
   const filterOptions = new Set();
 
   teamsData.forEach((team:any) => {
