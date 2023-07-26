@@ -24,7 +24,7 @@ export default async function Team({ params }: { params: { id: number } }) {
       
       <Navbar/>
 
-      <div className="mb-32 w-full px-10 grid lg:mb-0 lg:grid-cols-1 text-left relative z-[1]">
+      <div className="mb-32 sm:mt-20 w-full px-10 grid lg:mb-0 lg:grid-cols-1 text-left relative z-[1]">
         <div
           className="w-full group rounded-lg border border-transparent px-5 py-4 transition-colors border-gray-300 bg-gray-100 dark:border-neutral-700 dark:bg-neutral-800/30 border-neutral-700 hover:dark:bg-neutral-800/30"
         >

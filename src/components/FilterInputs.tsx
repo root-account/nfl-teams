@@ -45,7 +45,7 @@ const FilterInputs = () => {
     };
 
   return (
-    <div className="mb-15 block w-full">
+    <div className="mb-15 block w-full sm:mt-20">
     <div className="mb-8 grid w-full px-10 text-center lg:grid-cols-3 gap-5 lg:text-left relative z-[1]">
 
         <form className='w-50 mb- block' action="">
